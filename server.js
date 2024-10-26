@@ -12,6 +12,7 @@ let commentsArray = [];
 // Middleware zum Parsen des Request-Bodys
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Middleware zum Bereitstellen statischer Dateien (wie CSS)
 app.use(express.static(path.join(__dirname))); // Statische Dateien im aktuellen Verzeichnis bereitstellen
 
 // Route für die Startseite (index.html)
@@ -41,6 +42,7 @@ app.get('/read', (req, res) => {
         <html>
             <head>
                 <title>Kommentare</title>
+                <link rel="stylesheet" href="style.css"> <!-- Statische CSS-Datei einbinden -->
             </head>
             <body>
                 <h1>Kommentar Sektion</h1>
