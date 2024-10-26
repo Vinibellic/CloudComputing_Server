@@ -12,16 +12,21 @@ let commentsArray = [];
 // Middleware zum Parsen des Request-Bodys
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Route zum Laden von post.html
+// Route zum Laden von post.html über die Root-Route
+app.get('/', (req, res) => {
+    res.redirect('/post'); // Leitet von '/' zur '/post' Seite weiter
+});
+
+// Route zum Laden von post.html direkt
 app.get('/post', (req, res) => {
     res.sendFile(path.join(__dirname, 'post.html'));
 });
 
 // Route zum Empfangen von Name und Kommentar
 app.post('/addComment', (req, res) => {
-    const { name, comment } = req.body; // Extrahiere Name und Kommentar aus dem Request
+    const { name, comment } = req.body;
 
-    // Daten im Array speichern
+    // Speichern des Kommentars im Array
     commentsArray.push({ name, comment });
 
     // Weiterleitung zur /read Seite
@@ -30,7 +35,6 @@ app.post('/addComment', (req, res) => {
 
 // Route zum Laden von read.html und zum Anzeigen der Kommentare
 app.get('/read', (req, res) => {
-    // Dynamische HTML-Erstellung
     let htmlContent = `
         <html>
             <head>
@@ -41,7 +45,7 @@ app.get('/read', (req, res) => {
                 <div class="CommentSection">
     `;
 
-    // Kommentare als Liste einfügen
+    // Alle Kommentare im Array als HTML hinzufügen
     commentsArray.forEach((entry) => {
         htmlContent += `<p><strong>${entry.name}:</strong> ${entry.comment}</p>`;
     });
@@ -54,11 +58,10 @@ app.get('/read', (req, res) => {
         </html>
     `;
 
-    // Dynamische Seite senden
     res.send(htmlContent);
 });
 
-// Server starten und auf Anfragen warten
+// Server starten
 app.listen(port, () => {
     console.log(`Server läuft unter http://localhost:${port}`);
 });
