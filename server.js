@@ -63,7 +63,7 @@ app.get('/read', (req, res) => {
                                 <a class="nav-link" href="/read">Kommentare ansehen</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/test">Testseite</a>
+                                <a class="nav-link" href="/memegen">Memegenerator</a>
                             </li>
                         </ul>
                     </div>
