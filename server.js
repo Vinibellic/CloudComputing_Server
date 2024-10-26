@@ -12,6 +12,8 @@ let commentsArray = [];
 // Middleware zum Parsen des Request-Bodys
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname))); // Statische Dateien im aktuellen Verzeichnis bereitstellen
+
 // Route für die Startseite (index.html)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html')); // Sendet die index.html-Datei
