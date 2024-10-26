@@ -25,6 +25,11 @@ app.get('/post', (req, res) => {
     res.sendFile(path.join(__dirname, 'post.html')); // Sendet die post.html-Datei
 });
 
+// Route für memegen.html (Memegenerator)
+app.get('/memegen', (req, res) => {
+    res.sendFile(path.join(__dirname, 'memegen.html')); // Sendet die memegen.html-Datei
+});
+
 // Route für das Hinzufügen eines Kommentars
 app.post('/addComment', (req, res) => {
     const { name, comment } = req.body; // Extrahiere Name und Kommentar
