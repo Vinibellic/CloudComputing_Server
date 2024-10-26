@@ -6,53 +6,55 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 2000;
 
-// Array zur Speicherung der Formulardaten
-let formDataArray = [];
+// Array zur Speicherung der Kommentare
+let commentsArray = [];
 
 // Middleware zum Parsen des Request-Bodys
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Route für das Formular in index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+// Route zum Laden von post.html
+app.get('/post', (req, res) => {
+    res.sendFile(path.join(__dirname, 'post.html'));
 });
 
-// Route zum Empfangen der Formulardaten
-app.post('/submit', (req, res) => {
-    const formData = req.body.inputField;
+// Route zum Empfangen von Name und Kommentar
+app.post('/addComment', (req, res) => {
+    const { name, comment } = req.body; // Extrahiere Name und Kommentar aus dem Request
 
     // Daten im Array speichern
-    formDataArray.push(formData);
+    commentsArray.push({ name, comment });
 
-    // Erfolgsmeldung senden
-    res.send('Daten erfolgreich empfangen und gespeichert!<br><a href="/">Zurück</a><br><a href="/post">Zur gespeicherten Daten-Seite</a>');
+    // Weiterleitung zur /read Seite
+    res.redirect('/read');
 });
 
-// Route für die Seite post.html zum Anzeigen der gespeicherten Daten
-app.get('/post', (req, res) => {
+// Route zum Laden von read.html und zum Anzeigen der Kommentare
+app.get('/read', (req, res) => {
+    // Dynamische HTML-Erstellung
     let htmlContent = `
         <html>
             <head>
-                <title>Gespeicherte Daten</title>
+                <title>Kommentare</title>
             </head>
             <body>
-                <h1>Kommentar Section</h1>
-                <ul>
+                <h1>Kommentar Sektion</h1>
+                <div class="CommentSection">
     `;
 
-    // Alle Einträge im formDataArray als Liste anzeigen
-    formDataArray.forEach((data) => {
-        htmlContent += `<li>${data}</li>`;
+    // Kommentare als Liste einfügen
+    commentsArray.forEach((entry) => {
+        htmlContent += `<p><strong>${entry.name}:</strong> ${entry.comment}</p>`;
     });
 
     htmlContent += `
-                </ul>
-                <br><a href="/">Zurück zum Formular</a>
+                </div>
+                <br>
+                <a href="/post">Neuen Kommentar hinzufügen</a>
             </body>
         </html>
     `;
 
-    // Antwort mit den HTML-Inhalten senden
+    // Dynamische Seite senden
     res.send(htmlContent);
 });
 
