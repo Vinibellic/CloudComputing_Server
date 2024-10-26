@@ -3,34 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Kommentar hinzufügen</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body class="bg-success text-white">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Commentary</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="/">Commentary</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/post">Kommentar hinzufügen</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/read">Kommentare ansehen</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/memegen">Memegenerator</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/post">Kommentar hinzufügen</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/read">Kommentare ansehen</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/memegen">Memegenerator</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Comment Form -->
     <div class="container d-flex flex-column align-items-center vh-100">
         <h1 class="my-4">Kommentar hinzufügen</h1>
         <div class="row w-100">
@@ -55,7 +51,7 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS und jQuery einbinden -->
+    <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
