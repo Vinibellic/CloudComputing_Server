@@ -39,26 +39,62 @@ app.post('/addComment', (req, res) => {
 // Route für read.html (Kommentare ansehen)
 app.get('/read', (req, res) => {
     let htmlContent = `
-        <html>
-            <head>
-                <title>Kommentare</title>
-                <link rel="stylesheet" href="style.css"> <!-- Statische CSS-Datei einbinden -->
-            </head>
-            <body>
-                <h1>Kommentar Sektion</h1>
+        <!DOCTYPE html>
+        <html lang="de">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+            <title>Kommentare</title>
+        </head>
+        <body class="bg-success text-white">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="#">Commentary</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/post">Kommentar hinzufügen</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/read">Kommentare ansehen</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/test">Testseite</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container mt-5">
+                <h1 class="text-center mb-4">Kommentar Sektion</h1>
                 <div class="CommentSection">
     `;
 
     // Kommentare aus dem Array als HTML hinzufügen
     commentsArray.forEach((entry) => {
-        htmlContent += `<p><strong>${entry.name}:</strong> ${entry.comment}</p>`;
+        htmlContent += `
+            <div class="card mb-3 bg-dark text-white">
+                <div class="card-body">
+                    <h5 class="card-title">${entry.name}</h5>
+                    <p class="card-text">${entry.comment}</p>
+                </div>
+            </div>
+        `;
     });
 
     htmlContent += `
                 </div>
-                <br>
-                <a href="/">Zurück zur Startseite</a>
-            </body>
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-light">Zurück zur Startseite</a>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
         </html>
     `;
 
