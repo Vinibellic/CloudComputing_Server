@@ -1,10 +1,10 @@
 // Laden der Abhängigkeiten
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
+const express = require('express'); // Importiert Express
+const path = require('path'); // Importiert das path-Modul für sichere Dateipfade
+const bodyParser = require('body-parser'); // Importiert body-parser zum Verarbeiten von Formulardaten
 
 const app = express();
-const port = 2000;
+const port = 2000; // Port-Nummer für den Server
 
 // Array zur Speicherung der Kommentare
 let commentsArray = [];
@@ -12,28 +12,28 @@ let commentsArray = [];
 // Middleware zum Parsen des Request-Bodys
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Route zum Laden von post.html über die Root-Route
+// Route für die Startseite (index.html)
 app.get('/', (req, res) => {
-    res.redirect('/post'); // Leitet von '/' zur '/post' Seite weiter
+    res.sendFile(path.join(__dirname, 'index.html')); // Sendet die index.html-Datei
 });
 
-// Route zum Laden von post.html direkt
+// Route für post.html (Kommentar hinzufügen)
 app.get('/post', (req, res) => {
-    res.sendFile(path.join(__dirname, 'post.html'));
+    res.sendFile(path.join(__dirname, 'post.html')); // Sendet die post.html-Datei
 });
 
-// Route zum Empfangen von Name und Kommentar
+// Route für das Hinzufügen eines Kommentars
 app.post('/addComment', (req, res) => {
-    const { name, comment } = req.body;
+    const { name, comment } = req.body; // Extrahiere Name und Kommentar
 
-    // Speichern des Kommentars im Array
+    // Kommentar im Array speichern
     commentsArray.push({ name, comment });
 
-    // Weiterleitung zur /read Seite
+    // Weiterleitung zur Seite read.html
     res.redirect('/read');
 });
 
-// Route zum Laden von read.html und zum Anzeigen der Kommentare
+// Route für read.html (Kommentare ansehen)
 app.get('/read', (req, res) => {
     let htmlContent = `
         <html>
@@ -45,7 +45,7 @@ app.get('/read', (req, res) => {
                 <div class="CommentSection">
     `;
 
-    // Alle Kommentare im Array als HTML hinzufügen
+    // Kommentare aus dem Array als HTML hinzufügen
     commentsArray.forEach((entry) => {
         htmlContent += `<p><strong>${entry.name}:</strong> ${entry.comment}</p>`;
     });
@@ -53,15 +53,15 @@ app.get('/read', (req, res) => {
     htmlContent += `
                 </div>
                 <br>
-                <a href="/post">Neuen Kommentar hinzufügen</a>
+                <a href="/">Zurück zur Startseite</a>
             </body>
         </html>
     `;
 
-    res.send(htmlContent);
+    res.send(htmlContent); // Sendet die HTML-Antwort an den Client
 });
 
-// Server starten
+// Server starten und auf Anfragen warten
 app.listen(port, () => {
     console.log(`Server läuft unter http://localhost:${port}`);
 });
