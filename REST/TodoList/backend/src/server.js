@@ -14,6 +14,11 @@ let items = [
   { id: 2, name: 'Item 2', description: 'This is item 2' },
 ];
 
+// Function to generate a unique ID
+const generateId = () => {
+  return items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
+};
+
 // GET all items
 app.get('/api/items', (req, res) => {
   res.status(200).json(items);
@@ -72,7 +77,7 @@ app.delete('/api/items/:id', (req, res) => {
 });
 
 // Start the server
-const PORT = 3000;
+const PORT = 2000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
