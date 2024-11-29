@@ -2,12 +2,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 
 // Initialize the app
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
+
+// Serve static files from the 'frontend' directory
+app.use(express.static('frontend'));
 
 // Load data from file
 const loadData = () => {
