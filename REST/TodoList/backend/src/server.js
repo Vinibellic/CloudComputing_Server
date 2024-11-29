@@ -98,7 +98,7 @@ app.delete('/data/:id', (req, res) => {
 
 // Serve index.html as the default file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/frontend', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/frontend/public', 'index.html'));
 });
 
 // Start the server
