@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import EntryForm from './components/EntryForm';
-import EntryList from './components/EntryList';
-import EditForm from './components/EditForm';
+import EntryForm from './components/EntryForm.jsx';
+import EntryList from './components/EntryList.jsx';
+import EditForm from './components/EditForm.jsx';
 
 const App = () => {
   const [entries, setEntries] = useState([]);
