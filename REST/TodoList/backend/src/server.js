@@ -1,6 +1,5 @@
 // Importing required modules
 const express = require('express');
-const axios = require('axios');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
@@ -82,16 +81,6 @@ app.delete('/api/items/:id', (req, res) => {
 
     const deletedItem = items.splice(itemIndex, 1);
     res.status(200).json(deletedItem[0]);
-});
-
-// Example External API Call with Axios
-app.get('/api/external', async (req, res) => {
-    try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
-        res.status(200).json(response.data);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching external API' });
-    }
 });
 
 // Start the server
