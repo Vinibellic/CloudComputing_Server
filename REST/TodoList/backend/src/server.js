@@ -2,6 +2,7 @@
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
 // Initialize the app
 const app = express();
@@ -9,11 +10,30 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
-// Starting values for examples
-let items = [];
+// Load data from file
+const loadData = () => {
+  try {
+    const dataBuffer = fs.readFileSync('data.json');
+    return JSON.parse(dataBuffer.toString());
+  } catch (e) {
+    return [];
+  }
+};
+
+// Save data to file
+const saveData = (data) => {
+  fs.writeFileSync('data.json', JSON.stringify(data));
+};
+
+// Sample data to simulate a database
+let items = [
+  { id: 1, name: 'Item 1', description: 'This is item 1' },
+  { id: 2, name: 'Item 2', description: 'This is item 2' },
+];
+
 
 // GET all items
-app.get('/api/items', (req, res) => {
+app.get('/data', (req, res) => {
   res.status(200).json(items);
 });
 
