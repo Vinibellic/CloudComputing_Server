@@ -1,17 +1,14 @@
-// Importing required modules
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
-// Initialize the app
 const app = express();
 
-// Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
 // Serve static files from the 'frontend' directory
-app.use(express.static('frontend'));
+app.use(express.static(path.join(__dirname, '../../frontend/frontend/public')));
 
 // Load data from file
 const loadData = () => {
@@ -37,12 +34,12 @@ const generateId = () => {
 };
 
 // GET all items
-app.get('/data', (req, res) => {
+app.get('/api/data', (req, res) => {
   res.status(200).json(items);
 });
 
 // GET a single item by ID
-app.get('/data/:id', (req, res) => {
+app.get('/api/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const item = items.find(i => i.id === id);
   if (item) {
@@ -53,7 +50,7 @@ app.get('/data/:id', (req, res) => {
 });
 
 // POST a new item
-app.post('/data', (req, res) => {
+app.post('/api/data', (req, res) => {
   const newItem = {
     id: generateId(),
     name: req.body.name,
@@ -65,7 +62,7 @@ app.post('/data', (req, res) => {
 });
 
 // PUT to update an item
-app.put('/data/:id', (req, res) => {
+app.put('/api/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const itemIndex = items.findIndex(i => i.id === id);
 
@@ -83,7 +80,7 @@ app.put('/data/:id', (req, res) => {
 });
 
 // DELETE an item
-app.delete('/data/:id', (req, res) => {
+app.delete('/api/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const itemIndex = items.findIndex(i => i.id === id);
 
@@ -97,7 +94,7 @@ app.delete('/data/:id', (req, res) => {
 });
 
 // Serve index.html as the default file
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../frontend/frontend/public', 'index.html'));
 });
 

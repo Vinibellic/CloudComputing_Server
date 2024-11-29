@@ -9,19 +9,19 @@ const App = () => {
   const [editingEntry, setEditingEntry] = useState(null);
 
   useEffect(() => {
-    axios.get('/data')
+    axios.get('/api/data')
       .then(response => setEntries(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   const addEntry = (entry) => {
-    axios.post('/data', entry)
+    axios.post('/api/data', entry)
       .then(response => setEntries([...entries, response.data]))
       .catch(error => console.error('Error adding entry:', error));
   };
 
   const updateEntry = (id, updatedEntry) => {
-    axios.put(`/data/${id}`, updatedEntry)
+    axios.put(`/api/data/${id}`, updatedEntry)
       .then(response => {
         setEntries(entries.map(entry => (entry.id === id ? response.data : entry)));
         setEditingEntry(null);
@@ -30,7 +30,7 @@ const App = () => {
   };
 
   const deleteEntry = (id) => {
-    axios.delete(`/data/${id}`)
+    axios.delete(`/api/data/${id}`)
       .then(() => setEntries(entries.filter(entry => entry.id !== id)))
       .catch(error => console.error('Error deleting entry:', error));
   };
