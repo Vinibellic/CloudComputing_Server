@@ -1,6 +1,7 @@
 // Importing required modules
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
 // Initialize the app
 const app = express();
@@ -8,11 +9,23 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
+// Load data from file
+const loadData = () => {
+  try {
+    const dataBuffer = fs.readFileSync('data.json');
+    return JSON.parse(dataBuffer.toString());
+  } catch (e) {
+    return [];
+  }
+};
+
+// Save data to file
+const saveData = (data) => {
+  fs.writeFileSync('data.json', JSON.stringify(data));
+};
+
 // Sample data to simulate a database
-let items = [
-  { id: 1, name: 'Item 1', description: 'This is item 1' },
-  { id: 2, name: 'Item 2', description: 'This is item 2' },
-];
+let items = loadData();
 
 // Function to generate a unique ID
 const generateId = () => {
@@ -20,12 +33,12 @@ const generateId = () => {
 };
 
 // GET all items
-app.get('/api/items', (req, res) => {
+app.get('/data', (req, res) => {
   res.status(200).json(items);
 });
 
 // GET a single item by ID
-app.get('/api/items/:id', (req, res) => {
+app.get('/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const item = items.find(i => i.id === id);
   if (item) {
@@ -36,18 +49,19 @@ app.get('/api/items/:id', (req, res) => {
 });
 
 // POST a new item
-app.post('/api/items', (req, res) => {
+app.post('/data', (req, res) => {
   const newItem = {
-    id: items.length + 1,
+    id: generateId(),
     name: req.body.name,
     description: req.body.description,
   };
   items.push(newItem);
+  saveData(items);
   res.status(201).json(newItem);
 });
 
 // PUT to update an item
-app.put('/api/items/:id', (req, res) => {
+app.put('/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const itemIndex = items.findIndex(i => i.id === id);
 
@@ -57,6 +71,7 @@ app.put('/api/items/:id', (req, res) => {
       name: req.body.name || items[itemIndex].name,
       description: req.body.description || items[itemIndex].description,
     };
+    saveData(items);
     res.status(200).json(items[itemIndex]);
   } else {
     res.status(404).json({ message: 'Item not found' });
@@ -64,12 +79,13 @@ app.put('/api/items/:id', (req, res) => {
 });
 
 // DELETE an item
-app.delete('/api/items/:id', (req, res) => {
+app.delete('/data/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const itemIndex = items.findIndex(i => i.id === id);
 
   if (itemIndex !== -1) {
     items.splice(itemIndex, 1);
+    saveData(items);
     res.status(200).json({ message: 'Item deleted successfully' });
   } else {
     res.status(404).json({ message: 'Item not found' });
