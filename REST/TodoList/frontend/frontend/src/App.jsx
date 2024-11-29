@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import EntryForm from './components/EntryForm';
+import EntryList from './components/EntryList';
+import EditForm from './components/EditForm';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [entries, setEntries] = useState([]);
+  const [editingEntry, setEditingEntry] = useState(null);
+
+  useEffect(() => {
+    axios.get('/data')
+      .then(response => setEntries(response.data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  const addEntry = (entry) => {
+    axios.post('/data', entry)
+      .then(response => setEntries([...entries, response.data]))
+      .catch(error => console.error('Error adding entry:', error));
+  };
+
+  const updateEntry = (id, updatedEntry) => {
+    axios.put(`/data/${id}`, updatedEntry)
+      .then(response => {
+        setEntries(entries.map(entry => (entry.id === id ? response.data : entry)));
+        setEditingEntry(null);
+      })
+      .catch(error => console.error('Error updating entry:', error));
+  };
+
+  const deleteEntry = (id) => {
+    axios.delete(`/data/${id}`)
+      .then(() => setEntries(entries.filter(entry => entry.id !== id)))
+      .catch(error => console.error('Error deleting entry:', error));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Todo List</h1>
+      {editingEntry ? (
+        <EditForm entry={editingEntry} updateEntry={updateEntry} />
+      ) : (
+        <EntryForm addEntry={addEntry} />
+      )}
+      <EntryList entries={entries} setEditingEntry={setEditingEntry} deleteEntry={deleteEntry} />
+    </div>
+  );
+};
 
-export default App
+export default App;

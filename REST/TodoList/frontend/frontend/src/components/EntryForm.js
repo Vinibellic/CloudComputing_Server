@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-const EditForm = ({ entry, updateEntry }) => {
-  const [name, setName] = useState(entry.name);
-  const [description, setDescription] = useState(entry.description);
+const EntryForm = ({ addEntry }) => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateEntry(entry.id, { name, description });
+    addEntry({ name, description });
+    setName('');
+    setDescription('');
   };
 
   return (
@@ -23,9 +25,9 @@ const EditForm = ({ entry, updateEntry }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <button type="submit">Update Entry</button>
+      <button type="submit">Add Entry</button>
     </form>
   );
 };
 
-export default EditForm;
+export default EntryForm;
