@@ -1,18 +1,23 @@
 import React from 'react';
 
 const EntryList = ({ entries, setEditingEntry, deleteEntry }) => {
+  if (!Array.isArray(entries)) {
+    console.error('Entries is not an array:', entries);
+    return null;
+  }
+
   return (
     <ul className="list-group">
       {entries.map(entry => (
         <li key={entry.id} className="list-group-item d-flex justify-content-between align-items-center">
           <span>{entry.name}: {entry.description}</span>
           <div>
-            <IconButton onClick={() => setEditingEntry(entry)} color="primary">
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => deleteEntry(entry.id)} color="secondary">
-              <DeleteIcon />
-            </IconButton>
+            <button onClick={() => setEditingEntry(entry)} className="btn btn-primary btn-sm">
+              Edit
+            </button>
+            <button onClick={() => deleteEntry(entry.id)} className="btn btn-danger btn-sm ml-2">
+              Delete
+            </button>
           </div>
         </li>
       ))}

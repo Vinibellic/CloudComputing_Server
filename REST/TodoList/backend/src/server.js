@@ -1,14 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 const app = express();
 const port = 2000;
 
 app.use(express.json());
-app.use(cores());
-
-// Serve static files from the React app
-//app.use(express.static(path.join(__dirname, '../../frontend/build')));
+app.use(cors());
 
 let items = loadData();
 
@@ -87,11 +85,6 @@ app.delete('/api/data/:id', (req, res) => {
   } else {
     res.status(404).json({ message: 'Item not found' });
   }
-});
-
-// Serve index.html as the default file
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
 });
 
 // Start the server

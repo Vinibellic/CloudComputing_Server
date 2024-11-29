@@ -10,7 +10,13 @@ const App = () => {
 
   useEffect(() => {
     axios.get('/api/data')
-      .then(response => setEntries(response.data))
+      .then(response => {
+        if (Array.isArray(response.data)) {
+          setEntries(response.data);
+        } else {
+          console.error('Data is not an array:', response.data);
+        }
+      })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
