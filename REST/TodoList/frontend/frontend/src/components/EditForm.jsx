@@ -24,12 +24,12 @@ const EditForm = ({ entry, updateEntry }) => {
         <input
           type="text"
           className="form-control"
-          placeholder="Description"
+          placeholder="Beschreibung"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <button type="submit" className="btn btn-primary">Update Entry</button>
+      <button type="submit" className="btn btn-primary">Eintrag bearbeiten</button>
     </form>
   );
 };

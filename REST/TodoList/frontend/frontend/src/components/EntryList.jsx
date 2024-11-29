@@ -7,16 +7,16 @@ const EntryList = ({ entries, setEditingEntry, deleteEntry }) => {
   }
 
   return (
-    <ul className="list-group">
+    <ul className="list-group todo-list">
       {entries.map(entry => (
-        <li key={entry.id} className="list-group-item d-flex justify-content-between align-items-center">
+        <li key={entry.id} className="list-group-item todo-item">
           <span>{entry.name}: {entry.description}</span>
           <div>
             <button onClick={() => setEditingEntry(entry)} className="btn btn-primary btn-sm">
-              Edit
+              Bearbeiten
             </button>
             <button onClick={() => deleteEntry(entry.id)} className="btn btn-danger btn-sm ml-2">
-              Delete
+              Löschen
             </button>
           </div>
         </li>
