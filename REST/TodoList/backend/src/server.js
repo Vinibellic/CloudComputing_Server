@@ -29,58 +29,76 @@ const saveData = (data) => {
 };
 
 // Sample data to simulate a database
-let items = [
-  { id: 1, name: 'Item 1', description: 'This is item 1' },
-  { id: 2, name: 'Item 2', description: 'This is item 2' },
-];
+let items = loadData();
 
+// Function to generate a unique ID
+const generateId = () => {
+  return items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
+};
 
 // GET all items
 app.get('/data', (req, res) => {
   res.status(200).json(items);
 });
 
+// GET a single item by ID
+app.get('/data/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const item = items.find(i => i.id === id);
+  if (item) {
+    res.status(200).json(item);
+  } else {
+    res.status(404).json({ message: 'Item not found' });
+  }
+});
 
-// Add a new item
-app.post('/api/items', (req, res) => {
-    const newItem = req.body;
-    if (!newItem || !newItem.name) {
-        return res.status(400).json({ error: 'Item name is required' });
-    }
-    newItem.id = items.length + 1; // Generate a simple ID
-    items.push(newItem);
-    res.status(201).json(newItem);
+// POST a new item
+app.post('/data', (req, res) => {
+  const newItem = {
+    id: generateId(),
+    name: req.body.name,
+    description: req.body.description,
+  };
+  items.push(newItem);
+  saveData(items);
+  res.status(201).json(newItem);
 });
 
 // PUT to update an item
-app.put('/api/items/:id', (req, res) => {
-    const { id } = req.params;
-    const updatedItem = req.body;
+app.put('/data/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const itemIndex = items.findIndex(i => i.id === id);
 
-    const itemIndex = items.findIndex((item) => item.id === parseInt(id, 10));
-    if (itemIndex === -1) {
-        return res.status(404).json({ error: 'Item not found' });
-    }
-
-    if (!updatedItem || !updatedItem.name) {
-        return res.status(400).json({ error: 'Updated item name is required' });
-    }
-
-    items[itemIndex] = { ...items[itemIndex], ...updatedItem };
+  if (itemIndex !== -1) {
+    items[itemIndex] = {
+      id,
+      name: req.body.name || items[itemIndex].name,
+      description: req.body.description || items[itemIndex].description,
+    };
+    saveData(items);
     res.status(200).json(items[itemIndex]);
+  } else {
+    res.status(404).json({ message: 'Item not found' });
+  }
 });
 
 // DELETE an item
-app.delete('/api/items/:id', (req, res) => {
-    const { id } = req.params;
+app.delete('/data/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const itemIndex = items.findIndex(i => i.id === id);
 
-    const itemIndex = items.findIndex((item) => item.id === parseInt(id, 10));
-    if (itemIndex === -1) {
-        return res.status(404).json({ error: 'Item not found' });
-    }
+  if (itemIndex !== -1) {
+    items.splice(itemIndex, 1);
+    saveData(items);
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Item not found' });
+  }
+});
 
-    const deletedItem = items.splice(itemIndex, 1);
-    res.status(200).json(deletedItem[0]);
+// Serve index.html as the default file
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 // Start the server
