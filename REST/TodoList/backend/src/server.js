@@ -5,15 +5,16 @@ const app = express();
 const port = 2000;
 
 app.use(express.json());
+app.use(cores());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../../frontend/build')));
+//app.use(express.static(path.join(__dirname, '../../frontend/build')));
 
 let items = loadData();
 
 function loadData() {
   try {
-    const data = fs.readFileSync('data.json', 'utf8');
+    const data = fs.readFileSync(path.join(__dirname, 'data.json'), 'utf8');
     return JSON.parse(data);
   } catch (err) {
     return [];
@@ -21,7 +22,7 @@ function loadData() {
 }
 
 function saveData(data) {
-  fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+  fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(data, null, 2));
 }
 
 function generateId() {
@@ -90,11 +91,10 @@ app.delete('/api/data/:id', (req, res) => {
 
 // Serve index.html as the default file
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
 });
 
 // Start the server
-const PORT = 2000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
