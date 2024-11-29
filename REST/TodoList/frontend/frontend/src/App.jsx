@@ -36,8 +36,8 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
+    <div className="container">
+      <h1 className="my-4">Todo List</h1>
       {editingEntry ? (
         <EditForm entry={editingEntry} updateEntry={updateEntry} />
       ) : (

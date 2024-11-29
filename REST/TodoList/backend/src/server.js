@@ -1,37 +1,32 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-
 const app = express();
+const port = 2000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Serve static files from the 'frontend' directory
-app.use(express.static(path.join(__dirname, '../../frontend/frontend/public')));
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
 
-// Load data from file
-const loadData = () => {
-  try {
-    const dataBuffer = fs.readFileSync('data.json');
-    return JSON.parse(dataBuffer.toString());
-  } catch (e) {
-    return [];
-  }
-};
-
-// Save data to file
-const saveData = (data) => {
-  fs.writeFileSync('data.json', JSON.stringify(data));
-};
-
-// Sample data to simulate a database
 let items = loadData();
 
-// Function to generate a unique ID
-const generateId = () => {
+function loadData() {
+  try {
+    const data = fs.readFileSync('data.json', 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveData(data) {
+  fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+}
+
+function generateId() {
   return items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
-};
+}
 
 // GET all items
 app.get('/api/data', (req, res) => {
@@ -95,7 +90,7 @@ app.delete('/api/data/:id', (req, res) => {
 
 // Serve index.html as the default file
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/frontend/public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/public', 'index.html'));
 });
 
 // Start the server
