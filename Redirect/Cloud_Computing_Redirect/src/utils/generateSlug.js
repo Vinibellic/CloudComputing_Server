@@ -1,7 +1,5 @@
-const crypto = require('crypto');
-
-function generateSlug() {
-    return crypto.randomBytes(4).toString('hex');
+function generateSlug(title) {
+    return title.toLowerCase().replace(/\s+/g, '-');
 }
 
 module.exports = { generateSlug };
